@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+calculadora_binaria_gui.py
+
+Programa: Calculadora de conversiones de números binarios (a decimal y a octal).
+Autor: (Tu Nombre)
+Fecha: (Fecha Actual)
+
+Descripción:
+    Este programa ofrece una interfaz gráfica (ventana) que permite:
+      1. Convertir un número binario a su equivalente decimal.
+      2. Convertir un número binario a su equivalente octal.
+    El usuario ingresa un número en base 2, presiona uno de los botones de conversión
+    y obtiene el resultado directamente en la misma ventana. Se valida que la
+    entrada contenga únicamente caracteres '0' y '1' (números binarios de cualquier longitud).
+"""
+
+import tkinter as tk
+from tkinter import messagebox
+
+def binario_a_decimal(bin_str):
+    """
+    Convierte una cadena que representa un número binario (solo '0' y '1') a entero decimal.
+    Se recorre la cadena de izquierda a derecha, multiplicando por 2 y sumando el bit actual.
+    """
+    resultado = 0
+    for digito in bin_str:
+        resultado = resultado * 2 + int(digito)
+    return resultado
+
+def binario_a_octal(bin_str):
+    """
+    Convierte un número binario a octal:
+      1) Primero llama a binario_a_decimal(...) para obtener el valor en decimal.
+      2) Luego usa format(decimal, 'o') para convertir ese entero decimal a una cadena octal.
+    """
+    decimal = binario_a_decimal(bin_str)
+    octal_str = format(decimal, 'o')  # Ejemplo: decimal=8 → octal_str='10'
+    return octal_str
+
+def verificar_binario(bin_str):
+    """
+    Verifica que la cadena bin_str no esté vacía y que contenga solo '0' o '1'.
+    Retorna True si es válido; False en caso contrario.
+    """
+    if len(bin_str) == 0:
+        return False
+    for ch in bin_str:
+        if ch not in ('0', '1'):
+            return False
+    return True
+
+def convertir_a_decimal():
+    """
+    Función llamada cuando el usuario hace clic en "Binario → Decimal".
+    1. Toma el texto ingresado.
+    2. Verifica que sea un binario válido.
+    3. Realiza la conversión y muestra el resultado.
+    4. Si no es válido, muestra un mensaje de error.
+    """
+    bin_str = entry_binario.get().strip()
+    if not verificar_binario(bin_str):
+        messagebox.showerror("Entrada inválida", 
+                             "Por favor, ingresa solo dígitos 0 y 1.")
+        return
+
+    decimal = binario_a_decimal(bin_str)
+    label_resultado.config(text=f"Decimal: {decimal}")
+
+def convertir_a_octal():
+    """
+    Función llamada cuando el usuario hace clic en "Binario → Octal".
+    Procedimiento similar a convertir_a_decimal(), pero mostrando la versión octal.
+    """
+    bin_str = entry_binario.get().strip()
+    if not verificar_binario(bin_str):
+        messagebox.showerror("Entrada inválida", 
+                             "Por favor, ingresa solo dígitos 0 y 1.")
+        return
+
+    octal = binario_a_octal(bin_str)
+    label_resultado.config(text=f"Octal: {octal}")
+
+# --------------------
+# Construcción de la ventana principal
+# --------------------
+root = tk.Tk()
+root.title("Calculadora Binaria")
+root.geometry("350x250")      # Ancho x Alto
+root.resizable(False, False)  # Impide redimensionar la ventana
+
+# Etiqueta de instrucción
+label_info = tk.Label(root, text="Ingresa un número binario:", font=("Arial", 12))
+label_info.pack(pady=(20, 5))
+
+# Campo de entrada para el número binario
+entry_binario = tk.Entry(root, width=25, font=("Arial", 12), justify="center")
+entry_binario.pack(pady=(0, 15))
+
+# Marco para agrupar los botones de conversión
+frame_botones = tk.Frame(root)
+frame_botones.pack(pady=10)
+
+btn_decimal = tk.Button(frame_botones,
+                        text="Binario → Decimal",
+                        font=("Arial", 10),
+                        width=15,
+                        command=convertir_a_decimal)
+btn_decimal.grid(row=0, column=0, padx=5, pady=5)
+
+btn_octal = tk.Button(frame_botones,
+                      text="Binario → Octal",
+                      font=("Arial", 10),
+                      width=15,
+                      command=convertir_a_octal)
+btn_octal.grid(row=0, column=1, padx=5, pady=5)
+
+# Etiqueta para mostrar el resultado
+label_resultado = tk.Label(root, text="Resultado: ", font=("Arial", 12))
+label_resultado.pack(pady=(15, 5))
+
+# Botón para salir de la aplicación
+btn_salir = tk.Button(root, text="Salir", font=("Arial", 10), width=10, command=root.destroy)
+btn_salir.pack(pady=(10, 5))
+
+# Inicia el bucle principal de la interfaz (event loop)
+root.mainloop()
