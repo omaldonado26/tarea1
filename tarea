@@ -4,8 +4,8 @@
 calculadora_binaria_gui.py
 
 Programa: Calculadora de conversiones de números binarios (a decimal y a octal).
-Autor: (Tu Nombre)
-Fecha: (Fecha Actual)
+Orlyn Maldonado
+201710010056
 
 Descripción:
     Este programa ofrece una interfaz gráfica (ventana) que permite:
@@ -54,10 +54,7 @@ def verificar_binario(bin_str):
 def convertir_a_decimal():
     """
     Función llamada cuando el usuario hace clic en "Binario → Decimal".
-    1. Toma el texto ingresado.
-    2. Verifica que sea un binario válido.
-    3. Realiza la conversión y muestra el resultado.
-    4. Si no es válido, muestra un mensaje de error.
+   
     """
     bin_str = entry_binario.get().strip()
     if not verificar_binario(bin_str):
